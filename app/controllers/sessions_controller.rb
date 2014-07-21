@@ -4,18 +4,15 @@ class SessionsController < ApplicationController
 	end
 
 	def create
-		user = User.find_by(email: params[:session][:email].downcase)
-		if user && user.authenticate(params[:session][:password])
-			#Sign in user
-			sign_in user
-			redirect_to user
-		else
-			#Display error message and re-render signin form
-			flash.now[:error] = 'Error'
-			render 'new'
-		end
-		
-	end
+	    user = User.find_by(email: params[:session][:email].downcase)
+	    if user && user.authenticate(params[:session][:password])
+	      sign_in user
+	      redirect_back_or user
+	    else
+	      flash.now[:error] = 'Invalid email/password combination'
+	      render 'new'
+	    end
+  	end
 
 	def destroy
 		sign_out 
